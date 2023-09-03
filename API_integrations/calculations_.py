@@ -32,17 +32,39 @@ async def read_with_pandas():
     file, extension = await verify_files_and_read()
 
     if extension == "csv":
-        Data_Frame = pd.read_csv(Path("files_input" / file))
+        Data_Frame = pd.read_csv(Path("files_input") / file)
     elif extension == "json":
-        Data_Frame = pd.read_json(Path("files_input" / file))
+        Data_Frame = pd.read_json(Path("files_input") / file)
     elif extension == "xlsx":
-        Data_Frame = pd.read_excel(Path("files_input" / file))
-        
-    return Data_Frame
+        Data_Frame = pd.read_excel(Path("files_input") / file)
+    
+    print(Data_Frame.shape, Data_Frame.dtypes[4])
+    return Data_Frame, Data_Frame.shape
 
-async def extract_some_info(data_frame):
-    pass
+async def extract_some_info_and_check(data_frame):
+    columns = data_frame.shape[1]
+    rows = data_frame.shape[0]
+
+    if columns < 2:
+        raise ValueError("You don't have enougt columns!")
+
+    ctypes = [x[1:] for x in data_frame.dtypes]
+    if ctypes in ['int64','float64']:
+        pass
+
+    # Check if the second columnd and more are integers or floats
+
+
+
+    return columns, rows
+
+
 
 
 async def main_function():
     print("Hello world, this is the main function where I'll execute the main scripts")
+
+    await read_with_pandas()
+
+
+asyncio.run(read_with_pandas())
