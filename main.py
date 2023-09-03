@@ -1,8 +1,9 @@
 
 from fastapi import FastAPI
 from pydantic import BaseModel
-from API_integrations import calculations
-from API_integrations import graphic_deign
+import API_integrations.calculations_ as calculations
+import API_integrations.graphic_deign as grapDesign
+
 import os,asyncio, aiofiles
 
 
@@ -25,7 +26,8 @@ app = FastAPI(
 async def root():
     return {"result":"the server is actually working!"}
 
-
-
+@app.post("/calc_median")
+async def calc_median():
+    pass
 
 # uvicorn main:app --reload
