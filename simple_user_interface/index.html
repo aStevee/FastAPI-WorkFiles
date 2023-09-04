@@ -2,14 +2,19 @@
 <html lang="en">
 <head>
         <title>Statistical Calculator</title>
+        <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="styles/styles.css">
-        <script src="/javascript/myjs.js"></script>        
+        <script type="text/javascript" src="javascript/myjs.js"></script>        
 </head>
 <body>
 <div class="input">
     <h1>Input Part</h1>
     
-    <h3>Select how you want to introduce your array</h3>
+        <h3>Select how you want to introduce your array</h3>
+        <input type="file" id="fileInput">
+        <button onclick="uploadFile()">Upload</button>
+        <script src="script.js"></script>
+        <h5 id="messageLoad" class="loadMessage"></h5>
 
 </div>
 <div class="output">
