@@ -14,7 +14,13 @@ h2{
 
 /*Input part*/
 
+.send_file_div {
+    background-color: transparent; /*change this if you want to see the borders*/
+    display: block;
+    padding: 10px;
+    margin-left: 10px;
 
+}
 
 
 

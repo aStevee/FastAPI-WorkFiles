@@ -25,6 +25,10 @@ async def verify_files_and_read(file):
 
     return file, extension
 
+def get_file(file):
+    with open(os.getcwd() + f"/{file}","r") as f:
+        return f.read() 
+
 class FileManager(AsyncObject):
     async def __ainit__(self, file=None, extension=None):
         self._AsyncObject__closed = False 

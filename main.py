@@ -1,23 +1,21 @@
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Path
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 # from calculations_ import *
 from  API_integrations import graphic_deign
 from calculations_ import *
+from typing import Optional
 import os,asyncio, aiofiles
 
-
-def get_file(file):
-    with open(os.getcwd() + f"/{file}","r") as f:
-        return f.read() 
 
 
 app = FastAPI(
     description = get_file("README.md"),
     version="beta 0.0.1",
-    docs_url="/documentation",
+    docs_url="/documentation"
 )
+
 origins = [
     "http://localhost",
     "http://localhost:3000",
@@ -62,9 +60,9 @@ async def post_file(uploadedFile: UploadFile = File(...)):
     instance = await FileManager.__new__(FileManager)
     await instance.__ainit__(file, name)
 
+    X = await instance.read_file()
 
-
-    return {"result": uploadedFile.filename}
+    return {"result": X}
 
 
 @app.get("/send_something/{thing}")
@@ -73,4 +71,62 @@ def do_something(thing: str):
 
 
 
-# uvicorn main:app --reload
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+@app.get("/get-item/{item_id}")
+def get_item(item_id: int = Path(None, description="This is a parameter where you have to introduce an ID of your item")): # With Path() allow us some more detail or more enforcement on our parameter
+    return {"Item":item_id}
+'''
+inventory = [
+        {
+        "name":"Pau",
+        "id": 1
+        },
+        {
+        "name":"Raul",
+        "id": 2
+        },
+        {
+        "name":"Facundo",
+        "id":3
+        }
+    ]
+
+
+
+@app.get("/get-by-name")
+def get_by_name(*, name: Optional[str] = None, test: float):
+    if name:
+        for id in inventory:
+            if id["name"] == name:
+                return {"Result": f"{id['id']} | {test} |{id['name']} "}
+        return {"Message": f"{name} not found"}
+    return {"Message":"Input error ( GET /get-by-name?name=VALUE )"}
+

@@ -40,3 +40,7 @@ function uploadFile() {
             
     });
 }
+
+
+// Table maker
+
