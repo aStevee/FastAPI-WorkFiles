@@ -2,12 +2,11 @@
 from fastapi import FastAPI, File, UploadFile, Path
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-# from calculations_ import *
-from  API_integrations import graphic_deign
+from External_APis import testing1
 from calculations_ import *
 from typing import Optional
 import os,asyncio, aiofiles
-
+import uvicorn
 
 
 app = FastAPI(
@@ -36,69 +35,27 @@ app.add_middleware(
 
 """Application start here"""
 
+@app.get("/")
+def main():
+    return {"result":"server is actually working! You can use the diferents methods!"}
 
 @app.get("/proof1")
 async def proof1():
     return {"result":"This is an API"}
 
 
+"""End this method"""
+@app.post("/send_email/{user_email}")
+async def send_email(user_email: str, ): # Write a schema here
+    pass
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-@app.get("/get-item/{item_id}")
-def get_item(item_id: int = Path(None, description="This is a parameter where you have to introduce an ID of your item")): # With Path() allow us some more detail or more enforcement on our parameter
-    return {"Item":item_id}
-'''
-inventory = [
-        {
-        "name":"Pau",
-        "id": 1
-        },
-        {
-        "name":"Raul",
-        "id": 2
-        },
-        {
-        "name":"Facundo",
-        "id":3
-        }
-    ]
-
-
-
-@app.get("/get-by-name")
-def get_by_name(*, name: Optional[str] = None, test: float):
-    if name:
-        for id in inventory:
-            if id["name"] == name:
-                return {"Result": f"{id['id']} | {test} |{id['name']} "}
-        return {"Message": f"{name} not found"}
-    return {"Message":"Input error ( GET /get-by-name?name=VALUE )"}
-
+if __name__ == "__main__":
+    uvicorn.run(
+        "app.main:app",
+        host="0.0.0.0",
+        port = 8432,
+        reload=True
+    )
