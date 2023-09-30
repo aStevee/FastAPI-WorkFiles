@@ -3,7 +3,8 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from async_class import AsyncClass, AsyncObject, task, link
-import aiofiles 
+import aiofiles
+from fastapi import UploadFile
 
 path = os.getcwd()
 np.set_printoptions(precision=4, suppress=True)
@@ -11,19 +12,20 @@ np.set_printoptions(precision=4, suppress=True)
 path = os.getcwd()
 np.set_printoptions(precision=4, suppress=True)
 
-async def verify_files_and_read(file):
-    accepted_files = ('.json','.csv','.xlsx')
+async def verify_files_and_read(uploadedFile: UploadFile):
+    accepted_files = ('.json', '.csv', '.xlsx')
     extension = None
 
-    if not file.endswith(accepted_files):        
+    if not uploadedFile.filename.endswith(accepted_files):        
         raise ValueError("You can only use .json, Excel, and csv extensions")
     
     for acepF in accepted_files:
-        if file.endswith(acepF):
+        if uploadedFile.filename.endswith(acepF):
             extension = acepF
             break
 
-    return file, extension
+    return uploadedFile.filename, extension
+
 
 def get_file(file):
     with open(os.getcwd() + f"/{file}","r") as f:
@@ -32,12 +34,12 @@ def get_file(file):
 class FileManager(AsyncObject):
     async def __ainit__(self, file=None, extension=None):
         self._AsyncObject__closed = False 
-        self.file = file or ValueError("You haven't provided any file")
-        self.extension = extension or ValueError("You haven't provided any extension")
-
-    async def read_file(self, file = None):
+        self.file = file
+        self.extension = extension
+        
+    async def read_file(self):
         """Read a file and return its values"""
-        async with aiofiles.open(self.file or file, "r") as f:
+        async with aiofiles.open(self.file, "r") as f:
             return await f.read()
 
     async def extract_some_data_and_check(self, data_frame):
