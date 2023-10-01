@@ -2,11 +2,13 @@
 from fastapi import FastAPI, File, UploadFile, Path
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from External_APis import testing1
+from External_APis.Gmail_API import API_Conection, Send_Email
 from calculations_ import *
+from DataStrucure import schemas
 from typing import Optional
 import os,asyncio, aiofiles
 import uvicorn
+
 
 
 app = FastAPI(
@@ -45,10 +47,24 @@ async def proof1():
 
 
 """End this method"""
-@app.post("/send_email/{user_email}")
-async def send_email(user_email: str, ): # Write a schema here
-    pass
+@app.post("/send_email", description="Send an email to paumat17@gmail.com")
+async def send_email(body: schemas.EmailStrucure):
+    # INFO: In theory, this sends an email, i have to imporve this method anyway
+    # WARNING: Remember to make the exceptions in case that the user introduce an incorrect email 
 
+    try:
+        recipient = body.to
+        subject = body.subject
+        message_text = body.message_text
+
+        # Call Gmail API to send the email
+        mime_message = Send_Email.PauEmail.create_message(to=recipient, subject=subject, message_text=message_text)
+        result = Send_Email.PauEmail.send_message(API_Conection.service, 'me', mime_message)
+
+        return {"Result": result}
+
+    finally:
+        pass
 
 
 
