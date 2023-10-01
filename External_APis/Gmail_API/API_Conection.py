@@ -1,5 +1,6 @@
 import pickle
 from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from pathlib import Path
 import os
@@ -10,10 +11,20 @@ FURUTE DOCUMENTATION HERE
 """
 
 # OAuth 2.0 setup
-CLIENT_SECRET_FILE = Path(os.getcwd()) / "credentials/client_secret_1048033872747-o60hh2aq6lmgejb0d8qas0o60vqueufm.apps.googleusercontent.com.json"
+
+potential_path_1 = Path(os.getcwd()) / "credentials/client_secret_1048033872747-o60hh2aq6lmgejb0d8qas0o60vqueufm.apps.googleusercontent.com.json"
+potential_path_2 = Path(os.getcwd()) / "External_APis/Gmail_API/credentials/client_secret_1048033872747-o60hh2aq6lmgejb0d8qas0o60vqueufm.apps.googleusercontent.com.json"
+
+if potential_path_1.exists():
+    CLIENT_SECRET_FILE = potential_path_1
+elif potential_path_2.exists():
+    CLIENT_SECRET_FILE = potential_path_2
+else:
+    raise FileNotFoundError(f"Client secret file not found in either path!\nThis is the current path -> {os.getcwd()}")
+
 API_NAME = 'gmail'
 API_VERSION = 'v1'
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 
 credentials = None
